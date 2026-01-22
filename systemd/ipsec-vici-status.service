@@ -1,0 +1,15 @@
+[Unit]
+Description=Generate IPsec status JSON via VICI
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/bin/sh -c '/usr/local/bin/ipsec-vici-status > /var/run/ipsec-status.json.tmp && mv /var/run/ipsec-status.json.tmp /var/run/ipsec-status.json'
+StandardOutput=journal
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

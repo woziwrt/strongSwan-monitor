@@ -1,0 +1,9 @@
+[Unit]
+Description=Periodic IPsec status JSON update
+
+[Timer]
+OnBootSec=15
+OnUnitActiveSec=15
+
+[Install]
+WantedBy=timers.target

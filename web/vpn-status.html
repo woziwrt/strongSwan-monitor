@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SecureLink VPN status</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #111827;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 { margin-bottom: 10px; font-size: 24px; }
+    .subtitle { color: #9ca3af; margin-bottom: 20px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #020617;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #1f2937;
+      font-size: 13px;
+    }
+    th {
+      text-align: left;
+      background: #0b1120;
+      font-weight: 600;
+    }
+    tr:nth-child(even) { background: #020617; }
+    tr:nth-child(odd)  { background: #030712; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-up   { background: #022c22; color: #6ee7b7; }
+    .badge-down { background: #3f1d1d; color: #fca5a5; }
+    .badge-warn { background: #451a03; color: #fdba74; }
+  </style>
+</head>
+<body>
+  <h1>SecureLink VPN status</h1>
+  <div class="subtitle">IPsec tunnels overview (read-only).</div>
+
+  <table id="vpn-table">
+    <thead>
+      <tr>
+        <th>Tunnel name</th>
+        <th>Peer</th>
+        <th>Status</th>
+        <th>In (B / pkts)</th>
+        <th>Out (B / pkts)</th>
+        <th>Local subnets</th>
+        <th>Remote subnets</th>
+        <th>Flaps 24h</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    function mapStatus(ike_state) {
+      const s = (ike_state || '').toUpperCase();
+      if (s === 'ESTABLISHED' || s === 'UP') {
+        return { text: 'UP', cls: 'badge-up' };
+      }
+      if (s === 'CONNECTING' || s === 'REKEYING') {
+        return { text: 'TRANSIT', cls: 'badge-warn' };
+      }
+      return { text: 'DOWN', cls: 'badge-down' };
+    }
+
+    async function loadStatus() {
+      const res = await fetch('/api/vpn-status.php');
+      const data = await res.json();
+      const tbody = document.querySelector('#vpn-table tbody');
+      tbody.innerHTML = '';
+
+      (data.tunnels || []).forEach(t => {
+        const tr = document.createElement('tr');
+        const peer = t.peer_fqdn || t.peer_ip || '-';
+        const st = mapStatus(t.ike_state);
+
+        const statusBadge =
+          `<span class="badge ${st.cls}">${st.text}</span>`;
+
+        tr.innerHTML = `
+          <td>${t.name}</td>
+          <td>${peer}</td>
+          <td>${statusBadge}</td>
+          <td>${t.bytes_in} / ${t.packets_in}</td>
+          <td>${t.bytes_out} / ${t.packets_out}</td>
+          <td>${(t.local_subnets || []).join('<br>')}</td>
+          <td>${(t.remote_subnets || []).join('<br>')}</td>
+          <td>${t.flaps_24h}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    loadStatus();
+    setInterval(loadStatus, 20000);
+  </script>
+</body>
+</html>
