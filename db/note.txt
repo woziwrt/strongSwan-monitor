@@ -1,2 +1,2 @@
 mysql -u root -p < /home/ipsec/securelink_schema_prod.sql
-
+test
