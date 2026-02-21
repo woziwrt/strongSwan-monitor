@@ -99,8 +99,8 @@ $tunnels = is_array($data) && isset($data['tunnels']) ? $data['tunnels'] : [];
 // ---- DB pripojeni ----
 
 $dsn_host = 'localhost';
-$dsn_user = 'user';
-$dsn_pass = 'password';
+$dsn_user = 'root';
+$dsn_pass = '';
 $dsn_db   = 'securelink';
 
 $pdo = null;

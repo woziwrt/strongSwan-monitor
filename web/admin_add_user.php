@@ -7,8 +7,8 @@ if (empty($_SESSION['logged_in']) || ($_SESSION['role'] ?? '') !== 'admin') {
 }
 
 $dsn_host = 'localhost';
-$dsn_user = 'user';
-$dsn_pass = 'password';
+$dsn_user = 'root';
+$dsn_pass = '';
 $dsn_db   = 'securelink';
 
 $pdo = new PDO("mysql:host=$dsn_host;dbname=$dsn_db;charset=utf8mb4", $dsn_user, $dsn_pass);

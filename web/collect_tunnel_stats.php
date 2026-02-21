@@ -8,8 +8,8 @@ date_default_timezone_set('Europe/Prague');
 $apiUrl  = 'http://127.0.0.1:80/api/vpn-status.php';
 
 $dsn_host = 'localhost';
-$dsn_user = 'user';
-$dsn_pass = 'password';
+$dsn_user = 'root';
+$dsn_pass = '';
 $dsn_db   = 'securelink';
 
 // ---- load JSON z API ----

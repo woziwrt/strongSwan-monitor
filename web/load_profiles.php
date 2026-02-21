@@ -7,8 +7,8 @@ ini_set('display_startup_errors', 1);
 
 // DB connection
 $dsn_host = 'localhost';
-$dsn_user = 'user';
-$dsn_pass = 'password';
+$dsn_user = 'root';
+$dsn_pass = '';
 $dsn_db   = 'securelink';
 
 try {

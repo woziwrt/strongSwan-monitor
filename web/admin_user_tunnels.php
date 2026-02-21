@@ -11,8 +11,8 @@ if (empty($_SESSION['logged_in']) || ($_SESSION['role'] ?? '') !== 'admin') {
 
 // DB connection
 $dsn  = 'mysql:host=localhost;dbname=securelink;charset=utf8mb4';
-$user = 'user';
-$pass = 'password';
+$user = 'root';
+$pass = '';
 
 try {
     $pdo = new PDO($dsn, $user, $pass, [

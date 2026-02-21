@@ -1,7 +1,7 @@
 <?php
 $dsn = 'mysql:host=localhost;dbname=securelink;charset=utf8mb4';
-$user = 'user';
-$pass = 'password';
+$user = 'root';
+$pass = '';
 
 $pdo = new PDO($dsn, $user, $pass, [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
